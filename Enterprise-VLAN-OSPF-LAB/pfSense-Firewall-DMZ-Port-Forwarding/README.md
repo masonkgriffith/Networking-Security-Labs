@@ -97,14 +97,82 @@ No other network is permitted RDP access to the DMZ.
 - Reduced Attack Surface
 
 ---
+## Troubleshooting & Incident Analysis
 
-## Troubleshooting Performed
+This lab included multiple real-world troubleshooting scenarios involving Layer 2 conflicts, NAT validation, and firewall rule enforcement.
 
-- Verified IIS service bindings
-- Validated NAT rule mapping
-- Confirmed RDP port listening
-- Adjusted firewall rule ordering
-- Tested inter-network restrictions
+---
+
+### 1. Critical Incident: Duplicate IP Address Conflict (LAN Interface)
+
+**Symptoms Observed:**
+- Intermittent loss of connectivity to the default gateway
+- Inconsistent ping responses to pfSense LAN interface
+- ARP table entries fluctuating between MAC addresses
+- Web UI access to pfSense occasionally failing
+
+**Initial Hypothesis:**
+Suspected firewall rule misconfiguration or interface instability.
+
+**Diagnostic Process:**
+- Verified LAN interface configuration and subnet mask
+- Confirmed no packet loss on physical interface
+- Checked pfSense system logs for interface errors (none found)
+- Used `arp -a` on LAN host to inspect MAC-to-IP resolution
+- Identified duplicate MAC mapping for the gateway IP address
+
+Further validation confirmed that the host PC was statically configured with the same IP address as the pfSense LAN interface.
+
+**Root Cause:**
+Layer 2 ARP conflict caused by duplicate IP address assignment between pfSense LAN interface and host workstation.
+
+**Impact:**
+Gateway instability and unpredictable packet routing due to ARP cache poisoning between competing devices.
+
+**Resolution:**
+- Reassigned host to a unique static IP within subnet
+- Flushed ARP cache on affected devices
+- Verified stable ARP mapping to correct MAC address
+- Confirmed consistent gateway reachability and restored connectivity
+
+---
+
+### 2. HTTPS Service Exposure Failure
+
+**Symptoms Observed:**
+- HTTP accessible externally
+- HTTPS inaccessible via WAN
+- Port 443 appeared open but not serving content
+
+**Diagnostic Process:**
+- Verified NAT port forwarding configuration
+- Confirmed automatic firewall rule generation
+- Checked IIS bindings for HTTPS
+- Validated certificate binding to correct IP/port
+- Tested local access from DMZ server
+
+**Root Cause:**
+Improper IIS HTTPS binding configuration prevented service from listening correctly on port 443.
+
+**Resolution:**
+- Corrected IIS binding configuration
+- Revalidated NAT rule mapping
+- Confirmed successful HTTPS access externally
+
+---
+
+### 3. Management Network Access Validation
+
+**Objective:**
+Ensure RDP access to DMZ server is restricted exclusively to the MGMT network.
+
+**Testing Performed:**
+- Attempted RDP from LAN (blocked as expected)
+- Attempted RDP from WAN (blocked as expected)
+- Initiated RDP from MGMT network (successful)
+
+**Result:**
+Firewall rule ordering and interface segmentation successfully enforced administrative isolation.
 
 ---
 
