@@ -1,8 +1,10 @@
-# pfSense Firewall DMZ Lab with Port Forwarding to IIS Server
+# pfSense Firewall DMZ Lab with Management Network & Controlled RDP Access
 
 ## Objective
 
-Design and implement a segmented firewall architecture using pfSense with WAN, LAN, and DMZ interfaces. Publish a web server hosted in the DMZ using NAT port forwarding while maintaining secure internal segmentation.
+Design and implement a segmented firewall architecture using pfSense with WAN, LAN, DMZ, and Management networks. Publish a public IIS web server in the DMZ using NAT port forwarding while restricting administrative access (RDP) exclusively to the Management network.
+
+This lab demonstrates secure perimeter design, administrative isolation, and controlled service exposure.
 
 ---
 
@@ -13,75 +15,104 @@ Design and implement a segmented firewall architecture using pfSense with WAN, L
 | WAN | 192.168.1.100 | External / Upstream Network |
 | LAN | 10.0.1.0/24 | Internal User Network |
 | DMZ | 10.0.2.0/24 | Public-Facing Server Network |
+| MGMT | 10.0.3.0/24 | Administrative Management Network |
 
 DMZ Web Server:
 - Windows Server
 - IIS Installed
 - IP: 10.0.2.10
 
+Management Workstation:
+- IP: 10.0.3.10
+
 ---
 
-## Implementation Steps
+## Implementation Overview
 
 ### 1. Interface Configuration
-- Configured WAN as bridged interface
-- Assigned LAN and DMZ static subnets
-- Verified interface status and gateway reachability
+- Assigned WAN, LAN, DMZ, and MGMT interfaces
+- Configured static subnets
+- Verified gateway reachability and interface status
 
-### 2. Firewall Rules
-- Allowed LAN outbound access
-- Restricted DMZ to internal network
-- Configured WAN rule for HTTP (80) and HTTPS (443)
+---
 
-### 3. NAT Port Forwarding
+## 2. NAT Port Forwarding (Public Web Access)
 
-Created NAT rule:
+Configured WAN NAT rule:
 
 - Interface: WAN
 - Protocol: TCP
 - Destination: WAN Address
-- Destination Port: 80 → Redirect to 10.0.2.10 (Port 80)
-- Destination Port: 443 → Redirect to 10.0.2.10 (Port 443)
+- Port 80 → Redirect to 10.0.2.10 (HTTP)
+- Port 443 → Redirect to 10.0.2.10 (HTTPS)
 
-Enabled:
-- Associated firewall rule auto-generation
+Enabled automatic firewall rule generation.
+
+Purpose:
+Allow external users to access the IIS web server without exposing internal networks.
+
+---
+
+## 3. Firewall Rules & Segmentation
+
+### LAN Rules
+- Allow outbound internet access
+- Block direct access to DMZ administrative ports
+
+### DMZ Rules
+- Restricted outbound traffic
+- Prevented lateral movement to LAN and MGMT
+
+### MGMT Rules
+Created explicit rule:
+
+- Source: MGMT network
+- Destination: 10.0.2.10
+- Protocol: TCP
+- Port: 3389 (RDP)
+
+This ensures only management hosts can access the DMZ server for administrative tasks.
+
+No other network is permitted RDP access to the DMZ.
 
 ---
 
 ## Verification & Testing
 
-- Confirmed IIS service listening on ports 80 and 443
-- Verified internal LAN access to DMZ server
-- Tested external HTTP access via WAN IP
-- Validated HTTPS binding configuration
-- Confirmed firewall rule hit counters incrementing
+- Confirmed HTTP/HTTPS access externally via WAN
+- Verified LAN users cannot RDP to DMZ server
+- Successfully initiated RDP session from MGMT network
+- Validated firewall rule hit counters
+- Confirmed proper traffic flow using pfSense logs
 
 ---
 
 ## Security Concepts Applied
 
 - Network Segmentation
-- Perimeter Firewall Enforcement
+- Administrative Isolation
 - Principle of Least Privilege
-- DMZ Isolation
-- Controlled Service Publishing via NAT
+- Perimeter Service Publishing via NAT
+- Controlled Access Path Enforcement
+- Reduced Attack Surface
 
 ---
 
 ## Troubleshooting Performed
 
-- Resolved initial HTTP/HTTPS reachability issue
-- Verified IIS bindings
-- Confirmed NAT rule mapping
-- Ensured WAN interface was properly bridged
-- Validated firewall rule ordering
+- Verified IIS service bindings
+- Validated NAT rule mapping
+- Confirmed RDP port listening
+- Adjusted firewall rule ordering
+- Tested inter-network restrictions
 
 ---
 
 ## Skills Demonstrated
 
-- Firewall configuration and rule management
-- NAT and port forwarding implementation
-- DMZ architecture design
-- Web service exposure securely
-- Traffic validation and troubleshooting
+- Multi-zone firewall design
+- Secure DMZ architecture
+- NAT port forwarding configuration
+- Granular firewall rule creation
+- Administrative access control enforcement
+- Traffic validation and policy troubleshooting
