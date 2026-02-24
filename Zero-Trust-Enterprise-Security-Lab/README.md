@@ -105,3 +105,7 @@ This lab emphasizes defensive engineering:
 - Validation through logged evidence
 
 The goal was to demonstrate practical network security engineering beyond basic configuration tasks.
+
+
+![Firewall Log](FW_Block.png)
+![Nmap Output](Kali_Nmap.png)
