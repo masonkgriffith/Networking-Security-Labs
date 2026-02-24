@@ -108,4 +108,6 @@ The goal was to demonstrate practical network security engineering beyond basic 
 
 
 ![Firewall Log](FW_Block.png)
+
+
 ![Nmap Output](Kali_Nmap.png)
