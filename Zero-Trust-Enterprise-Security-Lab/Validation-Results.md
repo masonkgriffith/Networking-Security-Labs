@@ -113,16 +113,12 @@ Observed behavior:
 - TCP SYN packets to port 80 blocked
 - No TCP handshake completed
 - No host or port enumeration successful
-<img width="643" height="174" alt="image" src="https://github.com/user-attachments/assets/06627a32-7e14-437f-aecb-65f46ed59249" />
-
 
 Firewall logs confirmed:
 
 - Source: 10.0.20.10  
 - Destination: 10.0.40.x  
-- Rule matched: Block Users → INTERNAL_VLANS
-<img width="990" height="457" alt="image" src="https://github.com/user-attachments/assets/96b01908-1600-407e-9cd5-6f4904a3b031" />
-
+- Rule matched: Block Users → INTERNAL_VLANS  
 
 Result:
 Reconnaissance attempts were silently contained, preventing lateral movement from user to DMZ zone.
