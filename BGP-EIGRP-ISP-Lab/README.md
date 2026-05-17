@@ -45,6 +45,19 @@ to prevent internal infrastructure routes from leaking between autonomous system
 
 ---
 
+## Router Configurations
+
+| Router | Role          | AS  | Config |
+|--------|---------------|-----|--------|
+| R1     | Boundary      | 100 | [R1_Config.txt](R1_Config.txt) |
+| R2     | Boundary      | 200 | [R2_Config.txt](R2_Config.txt) |
+| R3     | Internal      | 100 | [R3_Config.txt](R3_Config.txt) |
+| R4     | Internal      | 200 | [R4_Config.txt](R4_Config.txt) |
+| R5     | Internal/Lo1  | 100 | [R5_Config.txt](R5_Config.txt) |
+| R6     | Internal/Lo1  | 200 | [R6_Config.txt](R6_Config.txt) |
+
+---
+
 ## Key Concepts
 
 **Why EIGRP alongside BGP?**
