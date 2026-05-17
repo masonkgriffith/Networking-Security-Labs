@@ -73,3 +73,14 @@ exchanged between ISPs.
 - GNS3
 - Cisco IOS routers
 - RFC 5737 documentation address space (203.0.113.0/24, 198.51.100.0/24, 192.0.2.0/24)
+
+
+![Topology](topology.png)
+![BGP Neighbor R1](R1_BGP_Neighbor.png)
+![BGP Neighbor R2](R2_BGP_Neighbor.png)
+![Prefix List R1](R1_Prefix-List.png)
+![Prefix List R2](R2_Prefix-List.png)
+![Route Map R1](R1_Route-Map.png)
+![Route Map R2](R2_Route-Map.png)
+![Ping R5](Ping_R5.png)
+![Ping R6](Ping_R6.png)
