@@ -22,25 +22,26 @@ to prevent internal infrastructure routes from leaking between autonomous system
 - **AS 200 — ISP Beta:** R2 (boundary), R4 (internal), R6 (internal)
 - **eBGP peering link:** 192.0.2.0/30 (R1: 192.0.2.1, R2: 192.0.2.2)
 
+![Topology](topology.png)
 
 ---
 
 ## IP Address Plan
 
-| Device | Interface  | Address              | Purpose                  |
-|--------|------------|----------------------|--------------------------|
-| R1     | e1/0       | 192.0.2.1/30         | eBGP peering link        |
-| R2     | e1/0       | 192.0.2.2/30         | eBGP peering link        |
-| R1     | e1/1       | 10.0.1.1/30          | EIGRP link to R3         |
-| R3     | e1/1       | 10.0.1.2/30          | EIGRP link to R1         |
-| R3     | e1/0       | 10.0.2.1/30          | EIGRP link to R5         |
-| R5     | e1/0       | 10.0.2.2/30          | EIGRP link to R3         |
-| R5     | Lo1        | 203.0.113.129/25     | AS100 public prefix      |
-| R2     | e1/1       | 10.0.3.1/30          | EIGRP link to R4         |
-| R4     | e1/0       | 10.0.3.2/30          | EIGRP link to R2         |
-| R4     | e1/1       | 10.0.4.1/30          | EIGRP link to R6         |
-| R6     | e1/0       | 10.0.4.2/30          | EIGRP link to R4         |
-| R6     | Lo1        | 198.51.100.129/25    | AS200 public prefix      |
+| Device | Interface | Address           | Purpose             |
+|--------|-----------|-------------------|---------------------|
+| R1     | e1/0      | 192.0.2.1/30      | eBGP peering link   |
+| R2     | e1/0      | 192.0.2.2/30      | eBGP peering link   |
+| R1     | e1/1      | 10.0.1.1/30       | EIGRP link to R3    |
+| R3     | e1/1      | 10.0.1.2/30       | EIGRP link to R1    |
+| R3     | e1/0      | 10.0.2.1/30       | EIGRP link to R5    |
+| R5     | e1/0      | 10.0.2.2/30       | EIGRP link to R3    |
+| R5     | Lo1       | 203.0.113.129/25  | AS100 public prefix |
+| R2     | e1/1      | 10.0.3.1/30       | EIGRP link to R4    |
+| R4     | e1/0      | 10.0.3.2/30       | EIGRP link to R2    |
+| R4     | e1/1      | 10.0.4.1/30       | EIGRP link to R6    |
+| R6     | e1/0      | 10.0.4.2/30       | EIGRP link to R4    |
+| R6     | Lo1       | 198.51.100.129/25 | AS200 public prefix |
 
 ---
 
@@ -69,18 +70,30 @@ exchanged between ISPs.
 
 ---
 
+## Verification
+
+### Topology
+![Topology](topology.png)
+
+### BGP Neighborship
+![BGP Neighbor R1](R1_BGP_Neighbor.png)
+![BGP Neighbor R2](R2_BGP_Neighbor.png)
+
+### Prefix-List Configuration
+![Prefix List R1](R1_Prefix-List.png)
+![Prefix List R2](R2_Prefix-List.png)
+
+### Route-Map Configuration
+![Route Map R1](R1_Route-Map.png)
+![Route Map R2](R2_Route-Map.png)
+
+### End-to-End Connectivity
+![Ping R5](Ping_R5.png)
+![Ping R6](Ping_R6.png)
+
+---
+
 ## Tools Used
 - GNS3
 - Cisco IOS routers
 - RFC 5737 documentation address space (203.0.113.0/24, 198.51.100.0/24, 192.0.2.0/24)
-
-
-![Topology](topology.png)
-![BGP Neighbor R1](R1_BGP_Neighbor.png)
-![BGP Neighbor R2](R2_BGP_Neighbor.png)
-![Prefix List R1](R1_Prefix-List.png)
-![Prefix List R2](R2_Prefix-List.png)
-![Route Map R1](R1_Route-Map.png)
-![Route Map R2](R2_Route-Map.png)
-![Ping R5](Ping_R5.png)
-![Ping R6](Ping_R6.png)
